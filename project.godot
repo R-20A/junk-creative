@@ -13,6 +13,10 @@ config_version=5
 config/name="junk-creative"
 config/features=PackedStringArray("4.7", "Forward Plus")
 
+[autoload]
+
+BuildMaster="*uid://cuhbbswgy1nub"
+
 [display]
 
 window/stretch/mode="canvas_items"
