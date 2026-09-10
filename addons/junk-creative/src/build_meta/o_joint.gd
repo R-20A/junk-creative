@@ -8,9 +8,15 @@ enum JointType {
 }
 
 var type: JointType = JointType.MERGE
-var a: BuildGroup
-var b: BuildGroup
+var group_a: BuildGroup
+var group_b: BuildGroup
+
+var phys_joint: Joint3D
 
 
 func is_joint_type(check_type: BuildJoint.JointType):
 	return type == check_type
+
+
+func is_merge_joint() -> bool:
+	return type == JointType.MERGE

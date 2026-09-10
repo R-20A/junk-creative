@@ -16,6 +16,6 @@ var baked_mesh: Mesh
 
 #region Physics Entities
 ## The physics body this group is simulated under
-var physics_body: RigidBody3D
+var phys_body: RigidBody3D
 var shape_instance: CollisionShape3D = CollisionShape3D.new()
 #endregion
