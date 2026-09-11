@@ -19,7 +19,6 @@ signal joint_loaded(joint: BuildJoint)
 signal joint_unloaded(joint: BuildJoint)
 #endregion
 
-
 ## Tick rate for updating physics world. 
 ## A greater rate will accumulate more operations creating input delay, and introduce stuttering as more shit at once needs to be handled
 ## Why the fuck have I added this??? Lmfao

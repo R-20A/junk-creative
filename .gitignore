@@ -1,5 +1,14 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
-/content/
+
+# Ignore project specific stuff
 /game/
+/content/
+/addons/*
+
+
+# Except junk creative add-on
+!/addons/junk-creative/
+!/addons/junk-creative/**
+
