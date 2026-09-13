@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="BlockRegistry" format=3 uid="uid://c0h4d443uukg8"]
+
+[ext_resource type="Script" uid="uid://cnd11piwolbo3" path="res://addons/junk-creative/src/resource_scripts/r_block_def.gd" id="1_y7las"]
+[ext_resource type="Resource" uid="uid://ceq5wa140b5sb" path="res://addons/junk-creative/content/blocks/1x1/bd_1x1.tres" id="2_3qdmp"]
+[ext_resource type="Script" uid="uid://fdqqphgohuaj" path="res://addons/junk-creative/src/resource_scripts/r_block_dict.gd" id="3_lb8ch"]
+
+[resource]
+script = ExtResource("3_lb8ch")
+defs = Dictionary[int, ExtResource("1_y7las")]({
+0: ExtResource("2_3qdmp")
+})
+metadata/_custom_type_script = "uid://fdqqphgohuaj"

@@ -15,7 +15,13 @@ var baked_mesh: Mesh
 
 
 #region Physics Entities
-## The physics body this group is simulated under
+## The [CollisionShape3D] for terrain / vehicle to vehicle collisions (no vehicles inside vehicles until I figure out Bricadia-like CD) [br]
+## Also acts as the root of this block in the game tree... ?
+var phys_group_shape: CollisionShape3D = CollisionShape3D.new()
+
+## The physics body this [BuildGroup] is simulated under
 var phys_body: RigidBody3D
-var shape_instance: CollisionShape3D = CollisionShape3D.new()
+
+## The static body for this group used to raycast voxels for building, interaction, and maybe projectiles??
+var voxel_body: StaticBody3D
 #endregion

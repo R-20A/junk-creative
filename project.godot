@@ -34,7 +34,9 @@ enabled=PackedStringArray("res://addons/junk-creative/plugin.cfg")
 [file_customization]
 
 folder_colors={
-"res://addons/junk-creative/": "gray"
+"res://addons/junk-creative/": "gray",
+"res://addons/junk-creative/content/": "purple",
+"res://addons/junk-creative/game/": "orange"
 }
 
 [physics]

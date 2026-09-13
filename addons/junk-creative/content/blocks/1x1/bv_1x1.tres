@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BlockVoxels" format=3 uid="uid://b8m3uqjokgyj8"]
+
+[ext_resource type="Script" uid="uid://bt7gkk3n2y2y3" path="res://addons/junk-creative/src/resource_scripts/r_block_voxels.gd" id="1_8b1ue"]
+
+[resource]
+script = ExtResource("1_8b1ue")
+voxels = Array[Vector3i]([Vector3i(0, 0, 0)])
+metadata/_custom_type_script = "uid://bt7gkk3n2y2y3"

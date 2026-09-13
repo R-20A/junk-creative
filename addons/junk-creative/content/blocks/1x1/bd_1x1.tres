@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BlockDefinition" format=3 uid="uid://ceq5wa140b5sb"]
+
+[ext_resource type="ArrayMesh" uid="uid://kxyka2g2ypu" path="res://addons/junk-creative/content/blocks/1x1/meshes/phys.res" id="1_7hak6"]
+[ext_resource type="Script" uid="uid://cnd11piwolbo3" path="res://addons/junk-creative/src/resource_scripts/r_block_def.gd" id="1_m0fa0"]
+[ext_resource type="Script" uid="uid://dsdwcrfgbxve3" path="res://addons/junk-creative/src/build_meta/o_block_instance.gd" id="1_reb4y"]
+[ext_resource type="ArrayMesh" uid="uid://dh4448boteyac" path="res://addons/junk-creative/content/blocks/1x1/meshes/render.res" id="2_reb4y"]
+[ext_resource type="Resource" uid="uid://b8m3uqjokgyj8" path="res://addons/junk-creative/content/blocks/1x1/bv_1x1.tres" id="4_sm4b7"]
+
+[resource]
+script = ExtResource("1_m0fa0")
+voxels = ExtResource("4_sm4b7")
+instance_script = ExtResource("1_reb4y")
+mesh_render = ExtResource("2_reb4y")
+mesh_physics = ExtResource("1_7hak6")
+metadata/_custom_type_script = "uid://cnd11piwolbo3"

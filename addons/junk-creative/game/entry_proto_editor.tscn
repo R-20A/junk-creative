@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://bt1bxtmtekd41"]
 
-[ext_resource type="Script" uid="uid://mxc6cfyioam6" path="res://addons/junk-creative/src/editor/n3d_jceditor.gd" id="1_eio1j"]
+[ext_resource type="Script" uid="uid://mxc6cfyioam6" path="res://addons/junk-creative/src/editor/n3d_jceditor.gd" id="1_qxfb0"]
 
 [node name="ProtoEditor" type="Node3D" unique_id=11267582 node_paths=PackedStringArray("world", "camera", "tool_container")]
-script = ExtResource("1_eio1j")
+script = ExtResource("1_qxfb0")
 world = NodePath("WORLD")
 camera = NodePath("WORLD/EditorCamera")
 tool_container = NodePath("UI/VBoxContainer/TOOL")

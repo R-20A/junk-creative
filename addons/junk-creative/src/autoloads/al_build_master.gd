@@ -19,6 +19,11 @@ signal joint_loaded(joint: BuildJoint)
 signal joint_unloaded(joint: BuildJoint)
 #endregion
 
+
+## The registry storing all references to [BlockDefinitions]
+## Will move it to a project setting once I get things going.
+const BLOCK_REGISTRY := preload("uid://c0h4d443uukg8")
+
 ## Tick rate for updating physics world. 
 ## A greater rate will accumulate more operations creating input delay, and introduce stuttering as more shit at once needs to be handled
 ## Why the fuck have I added this??? Lmfao
@@ -223,13 +228,13 @@ func _phys_unload_joint(joint: BuildJoint) -> void:
 #region Group Utility
 func _group_under_physics_body(group: BuildGroup, phys_world: Node) -> void:
 	group.phys_body = RigidBody3D.new()
-	group.phys_body.add_child(group.shape_instance)
+	group.phys_body.add_child(group.phys_group_shape)
 	phys_world.add_child(group.phys_body)
 
 
 func _group_lose_own_physics(group: BuildGroup) -> void:
 	if group.phys_body:
-		group.phys_body.remove_child(group.shape_instance)
+		group.phys_body.remove_child(group.phys_group_shape)
 		group.phys_body.queue_free()
 #endregion
 
@@ -237,10 +242,10 @@ func _group_lose_own_physics(group: BuildGroup) -> void:
 #region Merge Joints Utility
 func _joint_create_merge(main_group: BuildGroup, merge_group: BuildGroup):
 	_group_lose_own_physics(merge_group)
-	main_group.phys_body.add_child(merge_group.shape_instance)
+	main_group.phys_body.add_child(merge_group.phys_group_shape)
 
 
 func _joint_delete_merge(main_group: BuildGroup, merge_group: BuildGroup):
-	main_group.phys_body.remove_child(merge_group.shape_instance)
+	main_group.phys_body.remove_child(merge_group.phys_group_shape)
 	_group_under_physics_body(merge_group, main_group.phys_body.get_parent_node_3d())
 #endregion

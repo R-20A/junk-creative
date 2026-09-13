@@ -1,0 +1,9 @@
+## Defines a block, and the paths to its assets. [br]
+## Separated from the instance to not load the entire game thing just when browsing UI.
+class_name BlockDefinition
+extends Resource
+
+@export var voxels: BlockVoxels
+@export var instance_script: Script # Wish I could specify the script to be of a specific class...
+@export var mesh_render: Mesh
+@export var mesh_physics: Mesh

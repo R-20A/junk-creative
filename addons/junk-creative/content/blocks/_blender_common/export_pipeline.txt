@@ -1,0 +1,4 @@
+- Create blender file
+- Configure godot to read blender
+- setup export paths for meshes
+- Boom automatic export when you edit .blend file.
