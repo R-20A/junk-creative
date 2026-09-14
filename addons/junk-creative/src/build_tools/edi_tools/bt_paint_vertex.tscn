@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://gox5pwry6a8c"]
 
-[ext_resource type="Script" uid="uid://bmqdt6tnir750" path="res://addons/junk-creative/src/build_tools_editor/build_editor_tool.gd" id="1_cl83i"]
+[ext_resource type="Script" uid="uid://bmqdt6tnir750" path="res://addons/junk-creative/src/build_tools/build_editor_tool.gd" id="1_cl83i"]
 
 [node name="BtSelect" type="Control" unique_id=1358722669]
 layout_mode = 3

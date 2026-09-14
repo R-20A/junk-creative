@@ -17,6 +17,7 @@ const PACKED_TOOL_PAINT_VERTEX := preload("uid://gox5pwry6a8c")
 
 
 var current_tool: BuildEditorTool
+var undo_redo := UndoRedo.new()
 
 
 func _input(event: InputEvent) -> void:
@@ -27,7 +28,7 @@ func _input(event: InputEvent) -> void:
 
 #region Buttons
 func exit_editor() -> void:
-	pass
+	get_tree().quit()
 
 
 func load_creation() -> void:

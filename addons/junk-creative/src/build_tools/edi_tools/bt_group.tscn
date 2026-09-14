@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dp6c42hsghmwb"]
+
+[ext_resource type="Script" uid="uid://cpbdgx1g6vwy1" path="res://addons/junk-creative/src/build_tools/edi_tools/bt_group.gd" id="1_3awev"]
+
+[node name="BtGroup" type="Control" unique_id=1521985551]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_3awev")
+metadata/_custom_type_script = "uid://bmqdt6tnir750"
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=816474034]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 60.0
+grow_horizontal = 2
+
+[node name="VBoxContainer" type="HBoxContainer" parent="PanelContainer" unique_id=1259725813]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
