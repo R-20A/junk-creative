@@ -4,36 +4,6 @@ class_name BuildTool
 extends Control
 
 
-## Remember to delete itself
-class ToolAction extends Object:
-	var tool: BuildTool
-	var can_commit := false
-	
-	var camera: Camera3D = null
-	
-	
-	func start_action(tool: BuildTool) -> void:
-		self.tool = tool
-		self.camera = tool.camera
-	
-	
-	func process_input(event: InputEvent) -> void:
-		pass
-	
-	
-	func process(delta: float) -> void:
-		pass
-	
-	
-	func commit_action() -> bool:
-		free.call_deferred()
-		return false
-
-	
-	func cancel_action() -> void:
-		free()
-
-
 var camera: Camera3D
 var current_action: ToolAction
 
@@ -64,3 +34,41 @@ func _start_action(action: ToolAction) -> void:
 
 	set_deferred("current_action", action)
 	action.start_action.call_deferred(self)
+
+
+## Remember to delete itself
+class ToolAction extends Object:
+	var tool: BuildTool
+	var can_commit := false
+	
+	var camera: Camera3D = null
+	
+	
+	func start_action(tool: BuildTool) -> void:
+		self.tool = tool
+		self.camera = tool.camera
+	
+	
+	func process_input(event: InputEvent) -> void:
+		# Commit / cancel
+		if event is InputEventMouseButton:
+			if event.button_index == MouseButton.MOUSE_BUTTON_LEFT:
+				commit_action()
+			elif event.button_index == MouseButton.MOUSE_BUTTON_RIGHT:
+				cancel_action()
+	
+	
+	func process(delta: float) -> void:
+		pass
+	
+	
+	func commit_action() -> void:
+		cleanup_action()
+
+	
+	func cancel_action() -> void:
+		cleanup_action()
+
+
+	func cleanup_action() -> void:
+		free.call_deferred()

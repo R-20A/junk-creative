@@ -31,4 +31,15 @@ custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Create Group"
 
+[node name="TransformGroup" type="Button" parent="PanelContainer/VBoxContainer" unique_id=811531789]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Move/Rotate Group"
+
+[node name="DeleteGroup" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1464084029]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Delete Group"
+
 [connection signal="pressed" from="PanelContainer/VBoxContainer/CreateGroup" to="." method="_on_create_group_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/DeleteGroup" to="." method="_on_delete_group_pressed"]

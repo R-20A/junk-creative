@@ -1,4 +1,10 @@
-## A collection of blocks welded together
+## A collection of blocks welded together. [br]
+## 
+## Once loaded by the [BuildMaster], a [BuildGroup] is always represented by 3 different nodes:
+## - The physics collision shape, root of all other nodes
+## - The rendering mesh, childed to the collision shape
+## - The voxel body, again childed to the physics shape and used for building
+## The [BuildMaster] handles all 3.
 class_name BuildGroup
 extends Object
 

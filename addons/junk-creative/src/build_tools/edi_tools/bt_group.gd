@@ -1,11 +1,16 @@
 class_name BuildEditorGroupTool
 extends BuildEditorVoxelPicker
 
+
+func _on_create_group_pressed() -> void:
+	_start_action(CreateGroupAction.new())
+
+
+func _on_delete_group_pressed() -> void:
+	_start_action(DeleteGroupAction.new())
+
+
 # 3A - left clicking will execute the action with the undoredo
-
-# 3A.5 - need to check overlaps to place (woulda be cool if voxels become red)
-
-# 3B - right clicking will cancel the action
 class CreateGroupAction extends BuildTool.ToolAction:
 
 	var placement_plane := Plane.PLANE_XZ
@@ -32,24 +37,45 @@ class CreateGroupAction extends BuildTool.ToolAction:
 			if intersection_result:
 				placement_position = intersection_result
 				new_group.position = placement_position
-	
-		# Commit / cancel
-		if event is InputEventMouseButton:
-			if event.button_index == MouseButton.MOUSE_BUTTON_LEFT:
-				commit_action()
-			elif event.button_index == MouseButton.MOUSE_BUTTON_RIGHT:
-				cancel_action()
+				BuildMaster.group_check_overlaps.call_deferred(new_group)
 
+		# Commit / cancel
+		super.process_input(event)
 	
-	func commit_action() -> bool:
-		free.call_deferred()
-		return false
+	
+	func commit_action() -> void:
+		var overlap_data := BuildMaster.group_check_overlaps(new_group)
+		for overlap_check in overlap_data:
+			if overlap_check == true:
+				return
+		
+		cleanup_action()
 
 	
 	func cancel_action() -> void:
-		BuildMaster.delete_group(new_group)
-		free.call_deferred()
+		BuildMaster.group_delete(new_group)
+		cleanup_action()
 
 
-func _on_create_group_pressed() -> void:
-	_start_action(CreateGroupAction.new())
+class DeleteGroupAction extends BuildTool.ToolAction:
+	var voxel_tool: BuildEditorVoxelPicker
+	var result: BuildEditorVoxelPicker.VoxelQueryResult = null
+	
+	func start_action(tool: BuildTool) -> void:
+		super.start_action(tool)
+		voxel_tool = tool as BuildEditorVoxelPicker
+	
+	
+	func process_input(event: InputEvent) -> void:
+		if event is InputEventMouseMotion:
+			result = voxel_tool.query_build_voxels()
+		
+		# Commit / cancel
+		super.process_input(event)
+
+
+	func commit_action() -> void:
+		result = voxel_tool.query_build_voxels()
+		if result and result.voxel:
+			BuildMaster.group_delete(result.voxel.block_instance.owner)
+			cleanup_action()

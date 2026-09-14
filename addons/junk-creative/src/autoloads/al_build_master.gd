@@ -20,18 +20,6 @@ signal joint_unloaded(joint: BuildJoint)
 #endregion
 
 
-## Joint Merge Rule for loading quickly blueprints
-class MergeRule extends RefCounted:
-	## main
-	var group_a: BuildGroup
-	## merge
-	var group_b: BuildGroup
-	
-	func _init(group_a: BuildGroup, group_b: BuildGroup) -> void:
-		self.group_a = group_a
-		self.group_b = group_b
-
-
 #region Abstract/meta build groups
 # Kinda like the recipe to build physics instances
 # All on the same horizontal tree. Every group, every connection.
@@ -107,12 +95,13 @@ func build_default_group() -> BuildGroup:
 	var default_block := Junk.BLOCK_REGISTRY.defs[0].make_instance()
 	
 	group_add_block(default_group, default_block)
-	load_group(default_group)
+	group_load(default_group)
 	return default_group
 
 
 func group_add_block(group: BuildGroup, block: BlockInstance) -> void:
 	group.blocks.push_back(block)
+	block.owner = group
 	
 	for voxel_coord in block.res.voxels.voxels:
 		group.voxel_body.add_child( VoxelInstance.new(block, voxel_coord) )
@@ -134,6 +123,38 @@ func group_remove_block(group: BuildGroup, block: BlockInstance) -> void:
 	
 	# Update meshes
 	_group_bake_meshes.call_deferred(group)
+
+
+## Checks overlaps for all voxels in global space (faster),
+## returning an array of bools matching the order of voxel instances
+func group_check_overlaps(group: BuildGroup) -> Array[bool]:
+	var voxel_nodes := group.voxel_body.get_children()
+	
+	var overlaps: Array[bool] = []
+	overlaps.resize(voxel_nodes.size())
+	
+	var space_state := group.voxel_body.get_world_3d().direct_space_state
+	var query := PhysicsShapeQueryParameters3D.new()
+	
+	query.exclude = [group.voxel_body]
+	query.shape = Junk.VOXEL_SHAPE # same for all voxels
+	query.collision_mask = Junk.get_collision_mask(Junk.PHY_LAYER_VOXEL) # Only look for other build voxels for now
+	
+	# And now we check EVERY SINGLE voxel coordinate.
+	var voxel_i := 0
+	for voxel_instance: VoxelInstance in voxel_nodes:
+		query.transform = voxel_instance.global_transform
+		
+		# If there is one result, it overlaps.
+		overlaps[voxel_i] = ( space_state.intersect_shape(query, 1) ).size() > 0
+		
+		# Color debug voxel for debug
+		voxel_instance.debug_color = Color.RED if overlaps[voxel_i] else Color(0.0, 0.0, 0.0, 0.0)
+		
+		# Next...
+		voxel_i += 1
+	
+	return overlaps
 #endregion
 
 
@@ -148,22 +169,22 @@ func group_remove_block(group: BuildGroup, block: BlockInstance) -> void:
 # I need this extra layer of abstraction to not go crazy with merging rigidbodies or converting them to static.
 
 
-func load_group(group: BuildGroup) -> void:
+func group_load(group: BuildGroup) -> void:
 	_pending_update = true
 	_pending_add_groups.push_back(group)
 
 
-func delete_group(group: BuildGroup) -> void:
+func group_delete(group: BuildGroup) -> void:
 	_pending_update = true
 	_pending_remove_groups.push_back(group)
 
 
-func load_joint(joint: BuildJoint) -> void:
+func joint_load(joint: BuildJoint) -> void:
 	_pending_update = true
 	_pending_add_joints.push_back(joint)
 
 
-func delete_joint(joint: BuildJoint) -> void:
+func joint_delete(joint: BuildJoint) -> void:
 	_pending_update = true
 	_pending_remove_joints.push_back(joint)
 
@@ -219,6 +240,7 @@ func load_blueprint(blueprint: Blueprint, world: Node3D):
 # This is done in the physics representation, and therefore is private to the build master.
 # Other classes only control adding and removing blocks
 
+
 ## Sets up the node tree for the group
 func _group_setup_tree(group: BuildGroup) -> void:
 	group.phys_group_shape.shape = group.baked_phys_shape
@@ -231,6 +253,7 @@ func _group_setup_tree(group: BuildGroup) -> void:
 	group.voxel_body.collision_layer = 0
 	group.voxel_body.set_collision_layer_value(Junk.PHY_LAYER_VOXEL, true)
 	#endregion
+
 
 ## Bakes the block group into physics and mesh
 func _group_bake_meshes(group: BuildGroup):
@@ -338,3 +361,15 @@ func _joint_delete_merge(main_group: BuildGroup, merge_group: BuildGroup):
 	main_group.phys_body.remove_child(merge_group.phys_group_shape)
 	_group_under_physics_body(merge_group, main_group.phys_body.get_parent_node_3d())
 #endregion
+
+
+## Joint Merge Rule for loading quickly blueprints
+class MergeRule extends RefCounted:
+	## main
+	var group_a: BuildGroup
+	## merge
+	var group_b: BuildGroup
+	
+	func _init(group_a: BuildGroup, group_b: BuildGroup) -> void:
+		self.group_a = group_a
+		self.group_b = group_b
