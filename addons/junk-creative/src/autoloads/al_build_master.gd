@@ -53,7 +53,7 @@ var _pending_remove_joints: Array[BuildJoint] = []
 
 func _process(delta: float) -> void:
 	# Changes are accumulated in the past frames, then happen all at once??
-	if _pending_update and Engine.get_physics_frames() % Junk.PHYSICS_WORLD_UPDATE_RATE == 0:
+	if _pending_update and Engine.get_physics_frames() % Junk.PHYSICS_WORLD_UPDATE_TICK_RATE == 0:
 		var world := get_tree().root
 		
 		if Junk.DEBUG:
@@ -62,6 +62,11 @@ func _process(delta: float) -> void:
 		#region Update Groups
 		for group in _pending_add_groups:
 			groups.push_back(group)
+			
+			# initialize first time group
+			_setup_group_tree(group)
+			_bake_group(group)
+			
 			_phys_load_group(group, world)
 			group_loaded.emit()
 
@@ -189,15 +194,55 @@ func load_blueprint(blueprint: Blueprint, world: Node3D):
 #endregion
 
 
-#region Physics world interface for groups and joints
+#region Game world interface for groups and joints
 # This is done in the physics representation, and therefore is private to the build master.
 # Other classes only control adding and removing blocks
+
+## Sets up the node tree for the group
+func _setup_group_tree(group: BuildGroup) -> void:
+	group.phys_group_shape.shape = group.baked_phys_shape
+	group.mesh_instance.mesh = group.baked_mesh
+	
+	group.phys_group_shape.add_child(group.voxel_body)
+	group.phys_group_shape.add_child(group.mesh_instance)
 
 
 ## Bakes the block group into physics and mesh
 func _bake_group(group: BuildGroup):
-	pass
+	
+	#region Merge Render and Physics meshes
+	# clear mesh data
+	group.baked_mesh.clear_surfaces()
+	
+	# surface tool to merge render meshes
+	var st := SurfaceTool.new()
+	
+	# array to hold phys shape stuff
+	var phys_triangles := PackedVector3Array()
+	
+	
+	# loop over all blocks and accumulate meshes
+	for block: BlockInstance in group.blocks:
+		
+		# local transform relative to group origin
+		var local_transform := Transform3D(Basis.IDENTITY, block.position)
+		
+		var render_mesh := block.res.mesh_render
+		# huge time saver from Godot here (append existing mesh)
+		st.append_from(render_mesh, 0, local_transform)
+		
+		
+		# Append physics triangles
+		phys_triangles.append_array(block.res.mesh_physics.get_faces())
+		
+	
+	# update resources
+	group.baked_mesh = st.commit(group.baked_mesh)
+	group.baked_phys_shape.set_faces(phys_triangles)
+	#endregion
 
+		
+	
 
 
 ## Loads a group as a physics body
@@ -244,6 +289,7 @@ func _phys_unload_joint(joint: BuildJoint) -> void:
 #region Group Utility
 func _group_under_physics_body(group: BuildGroup, phys_world: Node) -> void:
 	group.phys_body = RigidBody3D.new()
+	group.phys_body.freeze = group.freeze
 	group.phys_body.add_child(group.phys_group_shape)
 	phys_world.add_child(group.phys_body)
 

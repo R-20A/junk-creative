@@ -2,7 +2,7 @@
 class_name BlockInstance
 extends Object
 
-## Voxel position of this block
+## Voxel position of this block, relative to [BuildGroup] origin
 var position: Vector3i
 
 ## 90 degree orientation of this block

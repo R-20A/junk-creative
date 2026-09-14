@@ -20,10 +20,9 @@ var current_tool: BuildEditorTool
 var undo_redo := UndoRedo.new()
 
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if current_tool:
 		current_tool.process_input(event)
-
 
 
 #region Buttons

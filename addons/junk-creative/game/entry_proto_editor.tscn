@@ -12,7 +12,7 @@ metadata/_custom_type_script = "uid://mxc6cfyioam6"
 [node name="WORLD" type="Node3D" parent="." unique_id=1649719223]
 
 [node name="EditorCamera" type="Camera3D" parent="WORLD" unique_id=791443892]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4)
 current = true
 
 [node name="UI" type="Control" parent="." unique_id=1317225104]
@@ -22,6 +22,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+focus_behavior_recursive = 1
+mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI" unique_id=1363510533]
 layout_mode = 1
@@ -55,11 +57,11 @@ layout_mode = 2
 tooltip_text = "NNNNNNNNNNNNNNiiiige"
 text = "Save"
 
-[node name="TSelect" type="Button" parent="UI/VBoxContainer/TopBar/HBoxContainer" unique_id=858886882]
+[node name="TGroup" type="Button" parent="UI/VBoxContainer/TopBar/HBoxContainer" unique_id=858886882]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
-tooltip_text = "Select, Move, Remove build groups!"
-text = "Tool:Select"
+tooltip_text = "Create, Select, Move, Remove build groups!"
+text = "Tool:Group"
 
 [node name="TBuild" type="Button" parent="UI/VBoxContainer/TopBar/HBoxContainer" unique_id=97202547]
 custom_minimum_size = Vector2(60, 60)
@@ -76,10 +78,11 @@ text = "Tool:Paint"
 [node name="TOOL" type="VBoxContainer" parent="UI/VBoxContainer" unique_id=1708595210]
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 2
 
 [connection signal="pressed" from="UI/VBoxContainer/TopBar/HBoxContainer/Exit" to="." method="exit_editor"]
 [connection signal="pressed" from="UI/VBoxContainer/TopBar/HBoxContainer/Load" to="." method="load_creation"]
 [connection signal="pressed" from="UI/VBoxContainer/TopBar/HBoxContainer/Save" to="." method="save_creation"]
-[connection signal="pressed" from="UI/VBoxContainer/TopBar/HBoxContainer/TSelect" to="." method="tool_select"]
+[connection signal="pressed" from="UI/VBoxContainer/TopBar/HBoxContainer/TGroup" to="." method="tool_select"]
 [connection signal="pressed" from="UI/VBoxContainer/TopBar/HBoxContainer/TBuild" to="." method="tool_build"]
 [connection signal="pressed" from="UI/VBoxContainer/TopBar/HBoxContainer/TPaint" to="." method="tool_paint"]

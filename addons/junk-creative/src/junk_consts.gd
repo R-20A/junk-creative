@@ -33,11 +33,11 @@ static func get_collision_mask(layer: int) -> int:
 
 
 #region ...
-## Tick rate for updating physics world. 
+## Tick rate for updating physics world (1 being fastest, ... slower) [br]
 ## A greater rate will accumulate more operations creating input delay, and introduce stuttering as more shit at once needs to be handled
 ## Why the fuck have I added this??? Lmfao
 ## I need some sort of stagger or async stuff to make this work decently, still it's a good basis for now.
-const PHYSICS_WORLD_UPDATE_RATE := 30
+const PHYSICS_WORLD_UPDATE_TICK_RATE := 1
 #endregion
 
 
