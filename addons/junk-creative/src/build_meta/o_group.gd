@@ -2,10 +2,28 @@
 class_name BuildGroup
 extends Object
 
-## If this is the root group of a build
-## then (attempt to) remember other spawned groups here when the player goes back to the bench
-## TODO: do this with IDs instead of group references...
-var blueprint_mates: Array[BuildGroup]
+
+#region Transform Identity
+## local, global?? must be fetched from physics
+var transform := Transform3D()
+
+var position:
+	get:
+		return transform.origin
+	set(value):
+		transform.origin = value
+
+var rotation:
+	get:
+		return transform.basis.get_euler()
+#endregion
+
+
+#region Data
+var blocks: Array[BlockInstance] = []
+#endregion
+
+
 
 #region Baked Entities
 var baked_com: Vector3
@@ -25,3 +43,9 @@ var phys_body: RigidBody3D
 ## The static body for this group used to raycast voxels for building, interaction, and maybe projectiles??
 var voxel_body: StaticBody3D
 #endregion
+
+
+## If this is the root group of a build
+## then (attempt to) remember other spawned groups here when the player goes back to the bench
+## TODO: do this with IDs instead of group references...
+var blueprint_mates: Array[BuildGroup]

@@ -27,19 +27,18 @@ func initialize_editor_tool(editor: JunkCreativeEditor) -> void:
 
 
 func cleanup_tool() -> void:
+	super.cleanup_tool()
+	
 	camera.remove_child(_voxel_ray)
 	_voxel_ray.queue_free()
-	pick_data.free()
 
 
 func process_input(event: InputEvent) -> void:
-	# Mouse picking
-	if event is InputEventMouseMotion:
-		_update_voxel_pick(event)
+	super.process_input(event)
 
 
 func process_tool(delta: float) -> void:
-	pass
+	super.process_tool(delta)
 
 
 func _update_voxel_pick(mouse_event: InputEventMouseMotion) -> void:

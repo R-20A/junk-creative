@@ -2,6 +2,8 @@
 ## I should later move these to project settings??
 class_name Junk
 
+const DEBUG := true
+
 
 #region Resources
 ## The physics shape for voxels to use for raycasting, needed to place or check overlaps

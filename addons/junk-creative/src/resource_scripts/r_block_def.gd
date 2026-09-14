@@ -7,3 +7,11 @@ extends Resource
 @export var instance_script: Script # Wish I could specify the script to be of a specific class...
 @export var mesh_render: Mesh
 @export var mesh_physics: Mesh
+
+
+func make_instance() -> BlockInstance:
+	var instance := BlockInstance.new()
+	instance.set_script(instance_script)
+	instance.res = self
+	
+	return instance

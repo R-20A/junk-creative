@@ -56,6 +56,9 @@ func _process(delta: float) -> void:
 	if _pending_update and Engine.get_physics_frames() % Junk.PHYSICS_WORLD_UPDATE_RATE == 0:
 		var world := get_tree().root
 		
+		if Junk.DEBUG:
+			print("New groups: %s, Remove groups: %s" % [_pending_add_groups, _pending_remove_groups])
+		
 		#region Update Groups
 		for group in _pending_add_groups:
 			groups.push_back(group)
@@ -90,10 +93,34 @@ func _process(delta: float) -> void:
 		_pending_remove_joints.clear()
 
 
-#region Build (meta) Interface
+#region Meta Building Interface
+# ACTUAL BUILDING!! add/remove blocks are all in one place here to manage signals or fx later.
+
+## Creates a group with the first block in [Junk.BLOCK_REGISTRY] already placed.
+func build_default_group() -> BuildGroup:
+	var default_group := BuildGroup.new()
+	var default_block := Junk.BLOCK_REGISTRY.defs[0].make_instance()
+	
+	group_add_block(default_group, default_block)
+	load_group(default_group)
+	return default_group
+
+
+func group_add_block(group: BuildGroup, block: BlockInstance) -> void:
+	group.blocks.push_back(block)
+#endregion
+
+
+
+#region Meta-Game Interface
 # This interface tells the build master that a group or a joint was created or removed,
 # and therefore that it needs to update the physics world!!
+#
 # But It does not handle creating stuff in the physics world.
+# It just tells that a group or joint exists, and it needs to rebuild the game stuff.
+#
+# I need this extra layer of abstraction to not go crazy with merging rigidbodies or converting them to static.
+
 
 func load_group(group: BuildGroup) -> void:
 	_pending_update = true

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dp6c42hsghmwb"]
 
-[ext_resource type="Script" uid="uid://cpbdgx1g6vwy1" path="res://addons/junk-creative/src/build_tools/edi_tools/bt_group.gd" id="1_3awev"]
+[ext_resource type="Script" uid="uid://cpbdgx1g6vwy1" path="res://addons/junk-creative/src/build_tools/edi_tools/bt_group.gd" id="1_pv333"]
 
 [node name="BtGroup" type="Control" unique_id=1521985551]
 layout_mode = 3
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_3awev")
+script = ExtResource("1_pv333")
 metadata/_custom_type_script = "uid://bmqdt6tnir750"
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=816474034]
@@ -24,3 +24,10 @@ grow_horizontal = 2
 [node name="VBoxContainer" type="HBoxContainer" parent="PanelContainer" unique_id=1259725813]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
+
+[node name="CreateGroup" type="Button" parent="PanelContainer/VBoxContainer" unique_id=529920445]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Create Group"
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/CreateGroup" to="." method="_on_create_group_pressed"]
