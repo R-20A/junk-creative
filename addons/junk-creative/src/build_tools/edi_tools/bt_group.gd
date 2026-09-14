@@ -15,6 +15,10 @@ class CreateGroupAction extends BuildTool.ToolAction:
 	var is_group_overlapping := true # can't place
 
 	
+	func start_action(tool: BuildTool) -> void:
+		super.start_action(tool)
+	
+	
 	func process_input(event: InputEvent) -> void:
 		
 		# Update placement position
@@ -24,9 +28,10 @@ class CreateGroupAction extends BuildTool.ToolAction:
 			var from := camera.project_ray_origin(mouse_position)
 			var to := from + camera.project_ray_normal(mouse_position) * Junk.EDITOR_RAYCAST_LENGTH
 			
-			var intersection_result := placement_plane.intersects_ray(from, to)
+			var intersection_result := placement_plane.intersects_segment(from, to)
 			if intersection_result:
 				placement_position = intersection_result
+				new_group.position = placement_position
 	
 		# Commit / cancel
 		if event is InputEventMouseButton:

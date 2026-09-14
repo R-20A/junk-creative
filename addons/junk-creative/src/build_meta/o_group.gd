@@ -4,8 +4,19 @@ extends Object
 
 
 #region Transform Identity
-## local, global?? must be fetched from physics
-var transform := Transform3D()
+## the physics transform of this group, or the relative transform when merged??
+var transform := Transform3D():
+	get:
+		if phys_body:
+			return phys_body.global_transform
+		return transform
+	
+	set(value):
+		if phys_body:
+			phys_body.set_deferred("global_transform", value)
+		else:
+			transform = value
+
 
 var position:
 	get:

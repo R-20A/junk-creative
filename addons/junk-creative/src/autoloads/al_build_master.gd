@@ -64,8 +64,8 @@ func _process(delta: float) -> void:
 			groups.push_back(group)
 			
 			# initialize first time group
-			_setup_group_tree(group)
-			_bake_group(group)
+			_group_setup_tree(group)
+			_group_bake_meshes(group)
 			
 			_phys_load_group(group, world)
 			group_loaded.emit()
@@ -113,6 +113,27 @@ func build_default_group() -> BuildGroup:
 
 func group_add_block(group: BuildGroup, block: BlockInstance) -> void:
 	group.blocks.push_back(block)
+	
+	for voxel_coord in block.res.voxels.voxels:
+		group.voxel_body.add_child( VoxelInstance.new(block, voxel_coord) )
+
+	# Update meshes
+	_group_bake_meshes.call_deferred(group)
+
+
+func group_remove_block(group: BuildGroup, block: BlockInstance) -> void:
+	group.blocks.erase(block)
+	
+	# clear all voxels on this group that were owned by the deleted block
+	for voxel_instance: VoxelInstance in group.voxel_body.get_children():
+		
+		if voxel_instance.block_instance == block:
+			voxel_instance.queue_free()
+
+	block.free.call_deferred()
+	
+	# Update meshes
+	_group_bake_meshes.call_deferred(group)
 #endregion
 
 
@@ -163,7 +184,7 @@ func load_blueprint(blueprint: Blueprint, world: Node3D):
 	
 	# 1: Bake groups
 	for group in bp_groups:
-		_bake_group(group)
+		_group_bake_meshes(group)
 	
 	# 2: Figure out what is a rigidbody, and what isn't by looking at the joints
 	for joint in bp_joints:
@@ -199,16 +220,20 @@ func load_blueprint(blueprint: Blueprint, world: Node3D):
 # Other classes only control adding and removing blocks
 
 ## Sets up the node tree for the group
-func _setup_group_tree(group: BuildGroup) -> void:
+func _group_setup_tree(group: BuildGroup) -> void:
 	group.phys_group_shape.shape = group.baked_phys_shape
 	group.mesh_instance.mesh = group.baked_mesh
 	
 	group.phys_group_shape.add_child(group.voxel_body)
 	group.phys_group_shape.add_child(group.mesh_instance)
-
+	
+	#region Layers
+	group.voxel_body.collision_layer = 0
+	group.voxel_body.set_collision_layer_value(Junk.PHY_LAYER_VOXEL, true)
+	#endregion
 
 ## Bakes the block group into physics and mesh
-func _bake_group(group: BuildGroup):
+func _group_bake_meshes(group: BuildGroup):
 	
 	#region Merge Render and Physics meshes
 	# clear mesh data
@@ -240,9 +265,6 @@ func _bake_group(group: BuildGroup):
 	group.baked_mesh = st.commit(group.baked_mesh)
 	group.baked_phys_shape.set_faces(phys_triangles)
 	#endregion
-
-		
-	
 
 
 ## Loads a group as a physics body
@@ -289,7 +311,12 @@ func _phys_unload_joint(joint: BuildJoint) -> void:
 #region Group Utility
 func _group_under_physics_body(group: BuildGroup, phys_world: Node) -> void:
 	group.phys_body = RigidBody3D.new()
+	
+	group.phys_body.collision_layer = 0
+	group.phys_body.set_collision_layer_value(Junk.PHY_LAYER_BUILD, true)
+	
 	group.phys_body.freeze = group.freeze
+	
 	group.phys_body.add_child(group.phys_group_shape)
 	phys_world.add_child(group.phys_body)
 
