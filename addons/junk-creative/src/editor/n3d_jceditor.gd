@@ -16,7 +16,13 @@ const PACKED_TOOL_PAINT_VERTEX := preload("uid://gox5pwry6a8c")
 @export var tool_container: Control
 
 
-var current_tool: BuildTool
+var current_tool: BuildEditorTool
+
+
+func _input(event: InputEvent) -> void:
+	if current_tool:
+		current_tool.process_input(event)
+
 
 
 #region Buttons
@@ -53,6 +59,9 @@ func _switch_tool(packed_tool_scene: PackedScene) -> void:
 		current_tool.queue_free()
 
 	current_tool = packed_tool_scene.instantiate()
-	tool_container.add_child(current_tool)
-	
-	current_tool.initialize_tool(camera)
+	if current_tool is BuildEditorTool:
+		tool_container.add_child(current_tool)
+		current_tool.initialize_editor_tool(self)
+	else:
+		printerr(packed_tool_scene.resource_path + "is not an editor tool!!")
+		current_tool.queue_free()

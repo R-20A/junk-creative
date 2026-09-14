@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://drvdfmwo43os3"]
+
+[ext_resource type="Script" uid="uid://bmqdt6tnir750" path="res://addons/junk-creative/src/build_tools_editor/build_editor_tool.gd" id="1_f2vmj"]
+
+[node name="BtSelect" type="Control" unique_id=1677622476]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_f2vmj")
+metadata/_custom_type_script = "uid://bmqdt6tnir750"

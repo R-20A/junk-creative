@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dp6c42hsghmwb"]
 
-[ext_resource type="Script" uid="uid://b7ksofr84fxsc" path="res://addons/junk-creative/src/build_tools/build_tool.gd" id="1_3efj6"]
+[ext_resource type="Script" uid="uid://bmqdt6tnir750" path="res://addons/junk-creative/src/build_tools_editor/build_editor_tool.gd" id="1_beu6q"]
 
-[node name="BtSelect" type="Control" unique_id=420933072]
+[node name="BtSelect" type="Control" unique_id=1521985551]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,8 +11,8 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_3efj6")
-metadata/_custom_type_script = "uid://b7ksofr84fxsc"
+script = ExtResource("1_beu6q")
+metadata/_custom_type_script = "uid://bmqdt6tnir750"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=574184587]
 layout_mode = 1

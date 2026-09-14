@@ -20,17 +20,6 @@ signal joint_unloaded(joint: BuildJoint)
 #endregion
 
 
-## The registry storing all references to [BlockDefinitions]
-## Will move it to a project setting once I get things going.
-const BLOCK_REGISTRY := preload("uid://c0h4d443uukg8")
-
-## Tick rate for updating physics world. 
-## A greater rate will accumulate more operations creating input delay, and introduce stuttering as more shit at once needs to be handled
-## Why the fuck have I added this??? Lmfao
-## I need some sort of stagger or async stuff to make this work decently, still it's a good basis for now.
-const PHYSICS_WORLD_UPDATE_RATE := 30
-
-
 ## Joint Merge Rule for loading quickly blueprints
 class MergeRule extends RefCounted:
 	## main
@@ -64,7 +53,7 @@ var _pending_remove_joints: Array[BuildJoint] = []
 
 func _process(delta: float) -> void:
 	# Changes are accumulated in the past frames, then happen all at once??
-	if _pending_update and Engine.get_physics_frames() % PHYSICS_WORLD_UPDATE_RATE == 0:
+	if _pending_update and Engine.get_physics_frames() % Junk.PHYSICS_WORLD_UPDATE_RATE == 0:
 		var world := get_tree().root
 		
 		#region Update Groups
