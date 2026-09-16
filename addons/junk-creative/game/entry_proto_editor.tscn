@@ -1,6 +1,32 @@
 [gd_scene format=3 uid="uid://bt1bxtmtekd41"]
 
 [ext_resource type="Script" uid="uid://mxc6cfyioam6" path="res://addons/junk-creative/src/editor/n3d_jceditor.gd" id="1_qxfb0"]
+[ext_resource type="Script" uid="uid://cgkuwcc2bq5rm" path="res://addons/junk-creative/src/editor/editor_camera.gd" id="2_nhhu5"]
+[ext_resource type="Shader" uid="uid://05nwqm1fh8tb" path="res://addons/junk-creative/src/shaders/s_edi_grid.gdshader" id="3_qehj5"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nhhu5"]
+sky_top_color = Color(0.91999996, 0.88, 1, 1)
+ground_bottom_color = Color(0.46100003, 0.44, 0.5, 1)
+
+[sub_resource type="Sky" id="Sky_qxfb0"]
+sky_material = SubResource("ProceduralSkyMaterial_nhhu5")
+
+[sub_resource type="Environment" id="Environment_g4v7s"]
+background_mode = 2
+background_color = Color(0.93832475, 0.85433555, 1, 1)
+sky = SubResource("Sky_qxfb0")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yf5fn"]
+render_priority = 0
+shader = ExtResource("3_qehj5")
+shader_parameter/GridColor = Color(1, 1, 1, 0.5)
+shader_parameter/GridSize = 0.5
+shader_parameter/LineThickness = 0.05
+
+[sub_resource type="QuadMesh" id="QuadMesh_g4v7s"]
+material = SubResource("ShaderMaterial_yf5fn")
+size = Vector2(100, 100)
+orientation = 1
 
 [node name="ProtoEditor" type="Node3D" unique_id=11267582 node_paths=PackedStringArray("world", "camera", "tool_container")]
 script = ExtResource("1_qxfb0")
@@ -12,8 +38,16 @@ metadata/_custom_type_script = "uid://mxc6cfyioam6"
 [node name="WORLD" type="Node3D" parent="." unique_id=1649719223]
 
 [node name="EditorCamera" type="Camera3D" parent="WORLD" unique_id=791443892]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4)
+transform = Transform3D(1, 0, 0, 0, 0.9396926, 0.34202012, 0, -0.34202012, 0.9396926, 0, 2, 4)
 current = true
+script = ExtResource("2_nhhu5")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="WORLD" unique_id=633519743]
+environment = SubResource("Environment_g4v7s")
+
+[node name="Grid" type="MeshInstance3D" parent="WORLD/WorldEnvironment" unique_id=92433404]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+mesh = SubResource("QuadMesh_g4v7s")
 
 [node name="UI" type="Control" parent="." unique_id=1317225104]
 layout_mode = 3

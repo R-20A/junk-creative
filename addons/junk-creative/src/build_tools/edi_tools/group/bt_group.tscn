@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dp6c42hsghmwb"]
 
-[ext_resource type="Script" uid="uid://cpbdgx1g6vwy1" path="res://addons/junk-creative/src/build_tools/edi_tools/bt_group.gd" id="1_pv333"]
+[ext_resource type="Script" uid="uid://cpbdgx1g6vwy1" path="res://addons/junk-creative/src/build_tools/edi_tools/group/bt_group.gd" id="1_eqgv3"]
 
 [node name="BtGroup" type="Control" unique_id=1521985551]
 layout_mode = 3
@@ -12,7 +12,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
-script = ExtResource("1_pv333")
+script = ExtResource("1_eqgv3")
 metadata/_custom_type_script = "uid://bmqdt6tnir750"
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=816474034]
@@ -42,4 +42,5 @@ layout_mode = 2
 text = "Delete Group"
 
 [connection signal="pressed" from="PanelContainer/VBoxContainer/CreateGroup" to="." method="_on_create_group_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/TransformGroup" to="." method="_on_transform_group_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/DeleteGroup" to="." method="_on_delete_group_pressed"]

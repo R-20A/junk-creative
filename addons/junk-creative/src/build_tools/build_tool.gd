@@ -5,7 +5,7 @@ extends Control
 
 
 var camera: Camera3D
-var current_action: ToolAction
+var current_action: Action
 
 
 func initialize_tool(camera: Camera3D) -> void:
@@ -27,7 +27,7 @@ func process_tool(delta: float) -> void:
 		current_action.process(delta)
 
 
-func _start_action(action: ToolAction) -> void:
+func _start_action(action: Action) -> void:
 	if current_action:
 		current_action.cancel_action.call_deferred()
 		current_action.free.call_deferred()
@@ -37,7 +37,7 @@ func _start_action(action: ToolAction) -> void:
 
 
 ## Remember to delete itself
-class ToolAction extends Object:
+class Action extends Object:
 	var tool: BuildTool
 	var can_commit := false
 	
@@ -51,11 +51,10 @@ class ToolAction extends Object:
 	
 	func process_input(event: InputEvent) -> void:
 		# Commit / cancel
-		if event is InputEventMouseButton:
-			if event.button_index == MouseButton.MOUSE_BUTTON_LEFT:
-				commit_action()
-			elif event.button_index == MouseButton.MOUSE_BUTTON_RIGHT:
-				cancel_action()
+		if is_main_event(event):
+			commit_action()
+		elif is_cancel_event(event):
+			cancel_action()
 	
 	
 	func process(delta: float) -> void:
@@ -72,3 +71,10 @@ class ToolAction extends Object:
 
 	func cleanup_action() -> void:
 		free.call_deferred()
+
+
+	func is_main_event(event: InputEvent) -> bool:
+		return event is InputEventMouseButton and event.button_index == MouseButton.MOUSE_BUTTON_LEFT
+	
+	func is_cancel_event(event: InputEvent) -> bool:
+		return event is InputEventKey and event.keycode == Key.KEY_TAB

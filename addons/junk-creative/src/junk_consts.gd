@@ -5,6 +5,11 @@ class_name Junk
 const DEBUG := true
 
 
+#region Config
+const VOXEL_SIZE := 0.5
+#endregion
+
+
 #region Resources
 ## The physics shape for voxels to use for raycasting, needed to place or check overlaps
 const VOXEL_SHAPE := preload("uid://kv155cll1tht")

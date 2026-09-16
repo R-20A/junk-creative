@@ -73,3 +73,12 @@ func query_build_voxels() -> VoxelQueryResult:
 class VoxelQueryResult:
 	var voxel: VoxelInstance = null
 	var normal: Vector3 = Vector3.MODEL_FRONT
+
+
+class Action extends BuildTool.Action:
+	var voxel_tool: BuildEditorVoxelPicker
+	var result: BuildEditorVoxelPicker.VoxelQueryResult = null
+	
+	func start_action(tool: BuildTool) -> void:
+		super.start_action(tool)
+		voxel_tool = tool as BuildEditorVoxelPicker
