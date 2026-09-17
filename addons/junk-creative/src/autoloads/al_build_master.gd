@@ -127,7 +127,7 @@ func group_remove_block(group: BuildGroup, block: BlockInstance) -> void:
 
 ## Checks overlaps for all voxels in global space (faster),
 ## returning an array of bools matching the order of voxel instances
-func group_check_overlaps(group: BuildGroup) -> Array[bool]:
+func group_check_overlaps(group: BuildGroup, test_transform: Transform3D = Transform3D.IDENTITY) -> Array[bool]:
 	var voxel_nodes := group.voxel_body.get_children()
 	
 	var overlaps: Array[bool] = []
@@ -140,10 +140,15 @@ func group_check_overlaps(group: BuildGroup) -> Array[bool]:
 	query.shape = Junk.VOXEL_SHAPE # same for all voxels
 	query.collision_mask = Junk.get_collision_mask(Junk.PHY_LAYER_VOXEL) # Only look for other build voxels for now
 	
+	# change test transform
+	var global_test_transform := group.voxel_body.global_transform
+	if test_transform != Transform3D.IDENTITY:
+		global_test_transform = test_transform
+	
 	# And now we check EVERY SINGLE voxel coordinate.
 	var voxel_i := 0
 	for voxel_instance: VoxelInstance in voxel_nodes:
-		query.transform = voxel_instance.global_transform
+		query.transform = global_test_transform * voxel_instance.transform
 		
 		# If there is one result, it overlaps.
 		overlaps[voxel_i] = ( space_state.intersect_shape(query, 1) ).size() > 0
@@ -155,6 +160,16 @@ func group_check_overlaps(group: BuildGroup) -> Array[bool]:
 		voxel_i += 1
 	
 	return overlaps
+
+
+## Returns true if any voxel is overlapping
+func group_is_overlapping(group: BuildGroup, test_transform: Transform3D = Transform3D.IDENTITY) -> bool:
+	var overlaps := group_check_overlaps(group, test_transform)
+	for check in overlaps:
+		if check == true:
+			return true
+	
+	return false
 #endregion
 
 

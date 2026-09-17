@@ -47,10 +47,8 @@ class CreateGroupAction extends BuildTool.Action:
 	
 	
 	func commit_action() -> void:
-		var overlap_data := BuildMaster.group_check_overlaps(new_group)
-		for overlap_check in overlap_data:
-			if overlap_check == true:
-				return
+		if BuildMaster.group_is_overlapping(new_group):
+			return
 		
 		cleanup_action()
 
@@ -75,13 +73,13 @@ class TransformGroupAction extends BuildEditorVoxelPicker.Action:
 		if event is InputEventMouseButton:
 			
 			if is_main_event(event):
-				gizmo.clear_selection()
+				gizmo.group = null
 				
 				result = voxel_tool.query_build_voxels()
 				if result and result.voxel:
 					
 					# Select group owner
-					gizmo.select(result.voxel.block_instance.owner.phys_body)
+					gizmo.group = result.voxel.block_instance.owner
 			
 			
 			#elif is_cancel_event(event):
