@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://cg25vba50tejv" path="res://addons/junk-creative/src/build_tools/edi_tools/build/bt_build.gd" id="1_ci5iq"]
 [ext_resource type="PackedScene" uid="uid://cfo0dv7lwa1hn" path="res://addons/junk-creative/src/build_tools/edi_tools/build/inventory/hb_slot.tscn" id="2_tbx53"]
-[ext_resource type="PackedScene" uid="uid://drwscvqi1svey" path="res://addons/junk-creative/src/build_tools/edi_tools/build/inventory/inventory_block.tscn" id="2_uxebb"]
+[ext_resource type="PackedScene" uid="uid://drwscvqi1svey" path="res://addons/junk-creative/src/build_tools/edi_tools/build/inventory/inv_item.tscn" id="2_uxebb"]
 
-[node name="BtBuild" type="Control" unique_id=1677622476]
+[node name="BtBuild" type="Control" unique_id=1677622476 node_paths=PackedStringArray("inventory_foldable", "inventory_container", "hotbar_container", "hotbar_preset_switcher")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +13,14 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 2
 script = ExtResource("1_ci5iq")
+packed_block_item = ExtResource("2_uxebb")
+packed_hotbar_slot = ExtResource("2_tbx53")
+inventory_foldable = NodePath("VBoxContainer2/Inventory/BLOCK_FOLD")
+inventory_container = NodePath("VBoxContainer2/Inventory/BLOCK_FOLD/Background/ScrollContainer/InventoryContainer")
+hotbar_container = NodePath("VBoxContainer2/Inventory/HOTBAR/HotbarContainer")
+hotbar_preset_switcher = NodePath("VBoxContainer2/Inventory/HOTBAR/HotbarPresetSwitcher")
 metadata/_custom_type_script = "uid://bmqdt6tnir750"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=461055481]
@@ -35,7 +42,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 tooltip_text = "Move a selection of blocks into a new group"
-text = "Cut Blocks"
+text = "Select Tool"
 
 [node name="Inventory" type="VBoxContainer" parent="VBoxContainer2" unique_id=1743288542]
 custom_minimum_size = Vector2(800, 0)
@@ -44,42 +51,44 @@ size_flags_horizontal = 4
 size_flags_vertical = 3
 alignment = 2
 
-[node name="FoldableContainer" type="FoldableContainer" parent="VBoxContainer2/Inventory" unique_id=544672072]
+[node name="BLOCK_FOLD" type="FoldableContainer" parent="VBoxContainer2/Inventory" unique_id=544672072]
 layout_mode = 2
 size_flags_vertical = 3
+folded = true
 title = "Block Inventory"
 title_position = 1
 
-[node name="InventoryTransparent" type="PanelContainer" parent="VBoxContainer2/Inventory/FoldableContainer" unique_id=128305254]
+[node name="Background" type="PanelContainer" parent="VBoxContainer2/Inventory/BLOCK_FOLD" unique_id=128305254]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 offset_transform_enabled = true
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer2/Inventory/FoldableContainer/InventoryTransparent" unique_id=810542838]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer2/Inventory/BLOCK_FOLD/Background" unique_id=810542838]
 layout_mode = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="HFlowContainer" type="FlowContainer" parent="VBoxContainer2/Inventory/FoldableContainer/InventoryTransparent/ScrollContainer" unique_id=1272406362]
+[node name="InventoryContainer" type="FlowContainer" parent="VBoxContainer2/Inventory/BLOCK_FOLD/Background/ScrollContainer" unique_id=1272406362]
 layout_mode = 2
 size_flags_horizontal = 4
 vertical = true
 
-[node name="InventoryBlock" parent="VBoxContainer2/Inventory/FoldableContainer/InventoryTransparent/ScrollContainer/HFlowContainer" unique_id=1017923312 instance=ExtResource("2_uxebb")]
+[node name="InventoryBlock" parent="VBoxContainer2/Inventory/BLOCK_FOLD/Background/ScrollContainer/InventoryContainer" unique_id=1017923312 instance=ExtResource("2_uxebb")]
 layout_mode = 2
 
 [node name="HOTBAR" type="PanelContainer" parent="VBoxContainer2/Inventory" unique_id=214559115]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2/Inventory/HOTBAR" unique_id=232374099]
+[node name="HotbarContainer" type="HBoxContainer" parent="VBoxContainer2/Inventory/HOTBAR" unique_id=232374099]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="HBSlot" parent="VBoxContainer2/Inventory/HOTBAR/HBoxContainer" unique_id=2131351973 instance=ExtResource("2_tbx53")]
+[node name="HBSlot" parent="VBoxContainer2/Inventory/HOTBAR/HotbarContainer" unique_id=2131351973 instance=ExtResource("2_tbx53")]
 layout_mode = 2
 
-[node name="PresetSwitcher" type="MenuButton" parent="VBoxContainer2/Inventory/HOTBAR" unique_id=218443496]
+[node name="HotbarPresetSwitcher" type="MenuButton" parent="VBoxContainer2/Inventory/HOTBAR" unique_id=218443496]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0

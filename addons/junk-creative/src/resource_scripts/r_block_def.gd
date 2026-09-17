@@ -19,4 +19,7 @@ func make_instance() -> BlockInstance:
 
 ## For thumbnails or placing blocks
 func make_preview_scene() -> Node3D:
-	return Node3D.new()
+	var mesh_instance := MeshInstance3D.new()
+	mesh_instance.mesh = mesh_render
+	
+	return mesh_instance

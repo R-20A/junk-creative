@@ -2,8 +2,6 @@
 
 [ext_resource type="Script" uid="uid://c3gbjrpb1kigc" path="res://addons/junk-creative/src/build_tools/edi_tools/build/inventory/hb_slot.gd" id="1_odmkb"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3wwi8"]
-
 [node name="HBSlot" type="PanelContainer" unique_id=1017923312 node_paths=PackedStringArray("texture_thumbnail")]
 custom_minimum_size = Vector2(60, 60)
 size_flags_horizontal = 4
@@ -14,5 +12,4 @@ texture_thumbnail = NodePath("TextureRect")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=881647566]
 layout_mode = 2
-texture = SubResource("NoiseTexture2D_3wwi8")
 expand_mode = 1

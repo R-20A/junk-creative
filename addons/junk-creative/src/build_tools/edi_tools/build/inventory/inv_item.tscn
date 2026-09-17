@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://drwscvqi1svey"]
 
-[ext_resource type="Script" uid="uid://cefxuwu6yxry7" path="res://addons/junk-creative/src/build_tools/edi_tools/build/inventory/inventory_block.gd" id="1_3wwi8"]
+[ext_resource type="Script" uid="uid://cefxuwu6yxry7" path="res://addons/junk-creative/src/build_tools/edi_tools/build/inventory/inv_item.gd" id="1_3wwi8"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3wwi8"]
 

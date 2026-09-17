@@ -50,4 +50,7 @@ const PHYSICS_WORLD_UPDATE_TICK_RATE := 1
 ## The length of the raycast for mouse picking.
 ## Lower it to avoid accidentally building on stuff so far away the player can't even see.
 const EDITOR_RAYCAST_LENGTH := 10.0
+
+## How many slots there are in the build tool hotbar
+const EDITOR_HOTBAR_SLOTS := 8
 #endregion
