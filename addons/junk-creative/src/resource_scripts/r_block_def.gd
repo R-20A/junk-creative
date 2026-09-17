@@ -15,3 +15,8 @@ func make_instance() -> BlockInstance:
 	instance.res = self
 	
 	return instance
+
+
+## For thumbnails or placing blocks
+func make_preview_scene() -> Node3D:
+	return Node3D.new()

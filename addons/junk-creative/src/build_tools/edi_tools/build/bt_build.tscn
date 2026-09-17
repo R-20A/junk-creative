@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://drvdfmwo43os3"]
 
 [ext_resource type="Script" uid="uid://cg25vba50tejv" path="res://addons/junk-creative/src/build_tools/edi_tools/build/bt_build.gd" id="1_ci5iq"]
+[ext_resource type="PackedScene" uid="uid://cfo0dv7lwa1hn" path="res://addons/junk-creative/src/build_tools/edi_tools/build/inventory/hb_slot.tscn" id="2_tbx53"]
+[ext_resource type="PackedScene" uid="uid://drwscvqi1svey" path="res://addons/junk-creative/src/build_tools/edi_tools/build/inventory/inventory_block.tscn" id="2_uxebb"]
 
 [node name="BtBuild" type="Control" unique_id=1677622476]
 layout_mode = 3
@@ -45,16 +47,47 @@ alignment = 2
 [node name="FoldableContainer" type="FoldableContainer" parent="VBoxContainer2/Inventory" unique_id=544672072]
 layout_mode = 2
 size_flags_vertical = 3
-folded = true
 title = "Block Inventory"
 title_position = 1
 
 [node name="InventoryTransparent" type="PanelContainer" parent="VBoxContainer2/Inventory/FoldableContainer" unique_id=128305254]
-visible = false
 layout_mode = 2
 size_flags_vertical = 3
 offset_transform_enabled = true
 
-[node name="HOTBAR" type="PanelContainer" parent="VBoxContainer2/Inventory" unique_id=214559115]
-custom_minimum_size = Vector2(0, 60)
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer2/Inventory/FoldableContainer/InventoryTransparent" unique_id=810542838]
 layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="HFlowContainer" type="FlowContainer" parent="VBoxContainer2/Inventory/FoldableContainer/InventoryTransparent/ScrollContainer" unique_id=1272406362]
+layout_mode = 2
+size_flags_horizontal = 4
+vertical = true
+
+[node name="InventoryBlock" parent="VBoxContainer2/Inventory/FoldableContainer/InventoryTransparent/ScrollContainer/HFlowContainer" unique_id=1017923312 instance=ExtResource("2_uxebb")]
+layout_mode = 2
+
+[node name="HOTBAR" type="PanelContainer" parent="VBoxContainer2/Inventory" unique_id=214559115]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2/Inventory/HOTBAR" unique_id=232374099]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="HBSlot" parent="VBoxContainer2/Inventory/HOTBAR/HBoxContainer" unique_id=2131351973 instance=ExtResource("2_tbx53")]
+layout_mode = 2
+
+[node name="PresetSwitcher" type="MenuButton" parent="VBoxContainer2/Inventory/HOTBAR" unique_id=218443496]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "hotbar"
+item_count = 3
+popup/item_0/text = "Fake Preset"
+popup/item_0/id = 0
+popup/item_1/text = "Fake Preset 2"
+popup/item_1/id = 1
+popup/item_2/text = "Fake Preset 3"
+popup/item_2/id = 2
