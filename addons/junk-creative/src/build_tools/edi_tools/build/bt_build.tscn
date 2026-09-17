@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://drvdfmwo43os3"]
+
+[ext_resource type="Script" uid="uid://cg25vba50tejv" path="res://addons/junk-creative/src/build_tools/edi_tools/build/bt_build.gd" id="1_ci5iq"]
+
+[node name="BtBuild" type="Control" unique_id=1677622476]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_ci5iq")
+metadata/_custom_type_script = "uid://bmqdt6tnir750"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=461055481]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopBar" type="PanelContainer" parent="VBoxContainer2" unique_id=1277325766]
+layout_mode = 2
+
+[node name="VBoxContainer" type="HBoxContainer" parent="VBoxContainer2/TopBar" unique_id=1271226746]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+
+[node name="SelectTool" type="Button" parent="VBoxContainer2/TopBar/VBoxContainer" unique_id=1179261275]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+tooltip_text = "Move a selection of blocks into a new group"
+text = "Cut Blocks"
+
+[node name="Inventory" type="VBoxContainer" parent="VBoxContainer2" unique_id=1743288542]
+custom_minimum_size = Vector2(800, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+alignment = 2
+
+[node name="FoldableContainer" type="FoldableContainer" parent="VBoxContainer2/Inventory" unique_id=544672072]
+layout_mode = 2
+size_flags_vertical = 3
+folded = true
+title = "Block Inventory"
+title_position = 1
+
+[node name="InventoryTransparent" type="PanelContainer" parent="VBoxContainer2/Inventory/FoldableContainer" unique_id=128305254]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+offset_transform_enabled = true
+
+[node name="HOTBAR" type="PanelContainer" parent="VBoxContainer2/Inventory" unique_id=214559115]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2

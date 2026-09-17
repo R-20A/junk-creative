@@ -110,6 +110,7 @@ tooltip_text = "NNNNNNNNNNNNNNiiiige"
 text = "Tool:Paint"
 
 [node name="TOOL" type="VBoxContainer" parent="UI/VBoxContainer" unique_id=1708595210]
+clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2

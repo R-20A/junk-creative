@@ -38,7 +38,7 @@ func _edit_scale(scale : Vector3) -> Vector3:
 ## Example of overriding rotating to not allow the user to rotate more than
 ## Pi / 2 (90) degrees on any axis at one time.
 func _edit_rotate(rotation : Vector3) -> Vector3:
-	var new_rotation := rotation.snappedf(PI / 4).normalized()
+	var new_rotation := rotation.snappedf(PI / 8)
 	
 	# check if rotating the group would make it overlap with any other group
 	var overlap_test_transform := group.transform

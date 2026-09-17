@@ -27,7 +27,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/Gizmo3DScript/plugin.cfg", "res://addons/junk-creative/plugin.cfg")
+enabled=PackedStringArray("res://addons/junk-creative/plugin.cfg")
 
 [file_customization]
 
