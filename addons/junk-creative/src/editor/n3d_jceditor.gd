@@ -20,6 +20,12 @@ var current_tool: BuildEditorTool
 var undo_redo := UndoRedo.new()
 
 
+func _ready() -> void:
+	# TODO: do this only if editor clean
+	BuildMaster.load_default_group()
+	
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if current_tool:
 		current_tool.process_input(event)

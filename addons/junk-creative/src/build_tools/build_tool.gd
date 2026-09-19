@@ -74,7 +74,7 @@ class Action extends Object:
 
 
 	func is_main_event(event: InputEvent) -> bool:
-		return event is InputEventMouseButton and event.button_index == MouseButton.MOUSE_BUTTON_LEFT
+		return event is InputEventMouseButton and (event.is_pressed() and event.button_index == MouseButton.MOUSE_BUTTON_LEFT)
 	
 	func is_cancel_event(event: InputEvent) -> bool:
 		return event is InputEventKey and event.keycode == Key.KEY_TAB

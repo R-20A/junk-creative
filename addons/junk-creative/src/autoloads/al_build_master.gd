@@ -89,8 +89,8 @@ func _process(delta: float) -> void:
 #region Meta Building Interface
 # ACTUAL BUILDING!! add/remove blocks are all in one place here to manage signals or fx later.
 
-## Creates a group with the first block in [Junk.BLOCK_REGISTRY] already placed.
-func build_default_group() -> BuildGroup:
+## Creates, and loads a group with the first block in [Junk.BLOCK_REGISTRY] already placed.
+func load_default_group() -> BuildGroup:
 	var default_group := BuildGroup.new()
 	var default_block := Junk.BLOCK_REGISTRY.defs[0].make_instance()
 	
@@ -103,8 +103,12 @@ func group_add_block(group: BuildGroup, block: BlockInstance) -> void:
 	group.blocks.push_back(block)
 	block.owner = group
 	
+	#region Spawn Physical Voxels for building
 	for voxel_coord in block.res.voxels.voxels:
-		group.voxel_body.add_child( VoxelInstance.new(block, voxel_coord) )
+		# voxels are placed in local coordinates relative to the voxel body...
+		var global_voxel_coord := (block.position * Junk.VOXEL_SIZE + voxel_coord * Junk.VOXEL_SIZE)
+		group.voxel_body.add_child( VoxelInstance.new(block, global_voxel_coord) )
+	#endregion
 
 	# Update meshes
 	_group_bake_meshes.call_deferred(group)
@@ -288,7 +292,7 @@ func _group_bake_meshes(group: BuildGroup):
 	for block: BlockInstance in group.blocks:
 		
 		# local transform relative to group origin
-		var local_transform := Transform3D(Basis.IDENTITY, block.position)
+		var local_transform := Transform3D(Basis.IDENTITY, block.position * Junk.VOXEL_SIZE)
 		
 		var render_mesh := block.res.mesh_render
 		# huge time saver from Godot here (append existing mesh)

@@ -5,6 +5,9 @@ func _on_create_group_pressed() -> void:
 	_start_action(CreateGroupAction.new())
 
 
+func _on_duplicate_group_pressed() -> void:
+	_start_action(TransformGroupAction.new())
+
 func _on_transform_group_pressed() -> void:
 	_start_action(TransformGroupAction.new())
 
@@ -18,7 +21,7 @@ class CreateGroupAction extends BuildTool.Action:
 	var placement_plane := Plane.PLANE_XZ
 	var placement_position := Vector3.ZERO
 	
-	var new_group := BuildMaster.build_default_group()
+	var new_group := BuildMaster.load_default_group()
 	var is_group_overlapping := true # can't place
 
 	
@@ -55,6 +58,53 @@ class CreateGroupAction extends BuildTool.Action:
 	func cancel_action() -> void:
 		BuildMaster.group_delete(new_group)
 		cleanup_action()
+
+
+# 3A - left clicking will execute the action with the undoredo
+class DuplicateGroupAction extends BuildTool.Action:
+	var original_group: BuildGroup = null
+	
+	var placement_plane := Plane.PLANE_XZ
+	var placement_position := Vector3.ZERO
+	
+	var new_group := BuildMaster.load_default_group()
+	var is_group_overlapping := true # can't place
+
+	
+	func start_action(tool: BuildTool) -> void:
+		super.start_action(tool)
+	
+	
+	func process_input(event: InputEvent) -> void:
+		
+		# Update placement position
+		if event is InputEventMouseMotion:
+			var mouse_position := tool.get_viewport().get_mouse_position()
+			
+			var from := camera.project_ray_origin(mouse_position)
+			var to := from + camera.project_ray_normal(mouse_position) * Junk.EDITOR_RAYCAST_LENGTH
+			
+			var intersection_result := placement_plane.intersects_segment(from, to)
+			if intersection_result:
+				placement_position = intersection_result.snappedf(0.5)
+				new_group.position = placement_position
+				BuildMaster.group_check_overlaps.call_deferred(new_group)
+
+		# Commit / cancel
+		super.process_input(event)
+	
+	
+	func commit_action() -> void:
+		if BuildMaster.group_is_overlapping(new_group):
+			return
+		
+		cleanup_action()
+
+	
+	func cancel_action() -> void:
+		BuildMaster.group_delete(new_group)
+		cleanup_action()
+
 
 
 class TransformGroupAction extends BuildEditorVoxelPicker.Action:

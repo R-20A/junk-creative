@@ -42,15 +42,11 @@ func process_tool(delta: float) -> void:
 ## Event must be of type "InputEventMouseMotion"!!! [br]
 ## Returns [VoxelQueryResult] if hit, else null.
 func query_build_voxels() -> VoxelQueryResult:
-	# reset query data
-	pick_data.voxel = null
-	pick_data.normal = Vector3.ZERO
-	
 	_voxel_ray.target_position = camera.project_local_ray_normal( get_viewport().get_mouse_position() ).normalized()
 	_voxel_ray.target_position *= Junk.EDITOR_RAYCAST_LENGTH
 	_voxel_ray.force_raycast_update()
 	
-	print(_voxel_ray.is_colliding())
+	#print(_voxel_ray.is_colliding())
 	
 	if _voxel_ray.is_colliding():
 		
@@ -59,6 +55,7 @@ func query_build_voxels() -> VoxelQueryResult:
 		var owner_id := voxel_body.shape_find_owner(shape_id)
 		
 		# This should work.
+		pick_data.body = voxel_body
 		pick_data.voxel = voxel_body.shape_owner_get_owner(owner_id) as VoxelInstance
 		pick_data.normal = _voxel_ray.get_collision_normal()
 		
@@ -71,8 +68,17 @@ func query_build_voxels() -> VoxelQueryResult:
 
 
 class VoxelQueryResult:
+	var body: Node3D = null
 	var voxel: VoxelInstance = null
 	var normal: Vector3 = Vector3.MODEL_FRONT
+	
+	
+	func get_voxelspace_position() -> Vector3:
+		return voxel.position / Junk.VOXEL_SIZE
+	
+	
+	func get_voxelspace_normal() -> Vector3:
+		return voxel.global_basis.inverse() * (normal)
 
 
 class Action extends BuildTool.Action:

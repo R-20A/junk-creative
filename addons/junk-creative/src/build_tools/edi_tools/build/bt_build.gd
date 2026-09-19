@@ -34,6 +34,8 @@ func _enter_tree() -> void:
 		item.block_index = i
 		item.texture_thumbnail.texture = block_thumbnail_cache[i]
 		inventory_container.add_child(item)
+		
+		item.selected.connect(_on_block_item_selected)
 	#endregion
 	
 	
@@ -46,6 +48,9 @@ func _enter_tree() -> void:
 		
 		hb_slot.updated.connect(_on_hotbar_slot_updated)
 		hb_slot.selected.connect(_on_hotbar_slot_selected)
+		
+		if i == 0:
+			hb_slot.block_index = 0
 	
 		#region Imaginary Hotbar Presets loading
 		# TODO: Need to add user settings savefile
@@ -71,10 +76,11 @@ func process_input(event: InputEvent) -> void:
 #region Signals
 func _on_block_item_selected(item: InventoryItemClass) -> void:
 	_start_action( PlaceBlockAction.new(item.block_index) )
+	print(item.block_index)
 
 
 func _on_hotbar_slot_selected(slot: HotbarSlotClass) -> void:
-	if slot.block_index == -1: # slot bar can be empty, items are always valid (unless the memory goes through a portal)
+	if slot.block_index == -1: # slot bar can be empty, items are always valid (unless the memory goes through a magnetic storm)
 		return
 	_start_action( PlaceBlockAction.new(slot.block_index) )
 
@@ -86,7 +92,61 @@ func _on_hotbar_slot_updated(slot: HotbarSlotClass) -> void:
 
 class PlaceBlockAction extends BuildEditorVoxelPicker.Action:
 	var block_index: int
-	var block_preview: Variant
 	
+	var block_def: BlockDefinition
+	var block_instance: BlockInstance
+	var block_preview: Node3D
+
+
 	func _init(block_index: int) -> void:
 		self.block_index = block_index
+
+
+	func start_action(tool: BuildTool) -> void:
+		super.start_action(tool)
+		
+		block_def = Junk.BLOCK_REGISTRY.defs[block_index]
+		block_instance = block_def.make_instance()
+		block_preview = block_def.make_preview_scene()
+		
+		tool.add_child(block_preview)
+		
+
+	func process(delta: float) -> void:
+		pass
+
+
+	func process_input(event: InputEvent) -> void:
+		if event is InputEventMouseMotion:
+			
+			# Move preview block around
+			result = voxel_tool.query_build_voxels()
+			if result:
+					
+				# Parent to phys shape to move the preview with the body.
+				# (Reparent to tool if the new parent is deleted...)
+				if block_preview.get_parent() != result.body:
+					block_preview.reparent(result.body)
+				
+				block_preview.global_transform = result.voxel.global_transform
+				block_preview.global_position += result.normal * Junk.VOXEL_SIZE
+		
+		# Commit / cancel
+		super.process_input(event)
+
+
+	func commit_action() -> void:
+		result = voxel_tool.query_build_voxels()
+		if result:
+			# When conferming, we do the actual voxel space position (normal is always 1.0 voxel unit)
+			
+			block_instance.position = result.get_voxelspace_position() + result.get_voxelspace_normal()
+			BuildMaster.group_add_block(result.voxel.block_instance.owner, block_instance)
+			
+			# Create new instance to place
+			block_instance = block_def.make_instance()
+	
+	
+	func cleanup_action() -> void:
+		block_instance.free()
+		block_preview.queue_free()
