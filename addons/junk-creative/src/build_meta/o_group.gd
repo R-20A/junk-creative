@@ -74,3 +74,18 @@ var freeze := true
 ## TODO: do this with IDs instead of group references...
 var blueprint_mates: Array[BuildGroup]
 #endregion
+
+
+## Creates a new copy of this group
+func make_copy() -> BuildGroup:
+	var copy := BuildGroup.new()
+	copy.transform = transform
+	
+	for block in blocks:
+		var copy_block := block.res.make_instance()
+		copy_block.position = block.position
+		
+		## Does extra stuff than pushing back to array
+		BuildMaster.group_add_block(copy, copy_block)
+	
+	return copy

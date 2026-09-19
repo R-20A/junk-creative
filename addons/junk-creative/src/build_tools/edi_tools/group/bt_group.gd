@@ -5,8 +5,8 @@ func _on_create_group_pressed() -> void:
 	_start_action(CreateGroupAction.new())
 
 
-func _on_duplicate_group_pressed() -> void:
-	_start_action(TransformGroupAction.new())
+#func _on_duplicate_group_pressed() -> void:
+	#_start_action(TransformGroupAction.new())
 
 func _on_transform_group_pressed() -> void:
 	_start_action(TransformGroupAction.new())
@@ -60,15 +60,20 @@ class CreateGroupAction extends BuildTool.Action:
 		cleanup_action()
 
 
-# 3A - left clicking will execute the action with the undoredo
 class DuplicateGroupAction extends BuildTool.Action:
-	var original_group: BuildGroup = null
-	
 	var placement_plane := Plane.PLANE_XZ
 	var placement_position := Vector3.ZERO
 	
-	var new_group := BuildMaster.load_default_group()
+	var original_group: BuildGroup = null
+	var new_group: BuildGroup = null
+	
 	var is_group_overlapping := true # can't place
+
+
+	func _init(original_group: BuildGroup) -> void:
+		self.original_group = original_group
+		new_group = original_group.make_copy()
+		BuildMaster.group_load(new_group)
 
 	
 	func start_action(tool: BuildTool) -> void:
@@ -129,10 +134,12 @@ class TransformGroupAction extends BuildEditorVoxelPicker.Action:
 					
 					# Select group owner
 					gizmo.group = result.voxel.block_instance.owner
-			
-			
-			#elif is_cancel_event(event):
-				#gizmo.clear_selection()
+		
+		# Duplicate group here in case??
+		if gizmo.group and event is InputEventKey:
+			if (event.keycode == Key.KEY_C) and event.is_pressed():
+				# MEH but it WORKS!!
+				tool._start_action( DuplicateGroupAction.new(gizmo.group) )
 
 
 	func cleanup_action():
